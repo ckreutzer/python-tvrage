@@ -46,7 +46,7 @@ class Episode(object):
         try:
             self.airdate = date.fromtimestamp(mktime(strptime(airdate, '%Y-%m-%d')))
         except ValueError:
-		    self.airdate = None 
+            self.airdate = None 
         self.title = title
         self.link = link
         self.number = number
