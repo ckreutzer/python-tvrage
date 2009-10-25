@@ -1,0 +1,8 @@
+# use glob syntax.
+syntax: glob
+
+.git*
+*.pyc
+*~
+build
+.DS_Store
