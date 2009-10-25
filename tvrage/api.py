@@ -44,8 +44,7 @@ class Episode(object):
         self.show = show
         self.season = season
         try:
-            self.airdate = date.fromtimestamp(
-                    mktime(strptime(airdate, '%Y-%m-%d')))
+            self.airdate = date.fromtimestamp(mktime(strptime(airdate, '%Y-%m-%d')))
         except ValueError:
 		    self.airdate = None 
         self.title = title
