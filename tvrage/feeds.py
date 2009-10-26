@@ -26,6 +26,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from urllib2 import urlopen, URLError
+from urllib import quote
+
 try:
     import xml.etree.cElementTree as et
 except ImportError:
@@ -52,10 +54,10 @@ def _fetch(url, node=None):
     return retval
     
 def search(show, node=None):
-    return _fetch(BASE_URL % ('search','show', show), node)
+    return _fetch(BASE_URL % ('search','show', quote(show)), node)
     
 def full_search(show, node=None):
-    return _fetch(BASE_URL % ('full_search','show', show), node)
+    return _fetch(BASE_URL % ('full_search','show', quote(show)), node)
     
 def showinfo(sid, node=None):
     return _fetch(BASE_URL % ('showinfo', 'sid', sid), node)
