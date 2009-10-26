@@ -191,7 +191,7 @@ class Show(object):
         for e in self.current_season.values():
             if (e.airdate != None) and (e.airdate >= today):
                 yield e
-	
+
     @property
     def latest_episode(self):
         """returns the latest episode that has aired already"""
