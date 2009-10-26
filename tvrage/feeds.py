@@ -25,8 +25,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from urllib2 import urlopen, URLError
-from urllib import quote
+from urllib2 import urlopen, URLError, quote
 
 try:
     import xml.etree.cElementTree as et
