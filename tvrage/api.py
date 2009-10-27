@@ -70,7 +70,7 @@ class Episode(object):
                     summary = re.search(
                         r"<table width='100%'><tr><td>(.*?)<br>", page, 
                         re.MULTILINE).group(1).strip()
-                    return summary
+                    return unicode(summary, 'utf-8')
                 except Exception, e:
                     print('Episode.summary: %s, %s' % (self, e))
         except URLError, e:
