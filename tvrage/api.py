@@ -68,7 +68,7 @@ class Episode(object):
             if not 'There is no summary added for this episode' in page:
                 try:
                     summary = re.search(
-                        r"</table>(.*?)<br>&nbsp;</td>", page, 
+                        r"</script><br>(.*?)<br>", page,
                         re.MULTILINE).group(1).strip()
                     return unicode(summary, 'utf-8')
                 except Exception, e:
