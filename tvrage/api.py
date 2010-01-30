@@ -128,8 +128,11 @@ class Show(object):
         show = feeds.search(self.shortname, node='show')
         # dynamically mapping the xml tags to properties:
         for elem in show:
+            # Don't set these yet
+            if elem.tag in ('seasons', ):
+                continue
             # these properties should be ints
-            if elem.tag in ('started', 'ended', 'seasons'):
+            elif elem.tag in ('started', 'ended'):
                 self.__dict__[elem.tag] = int(elem.text)
             # these are fine as strings
             else:
@@ -159,6 +162,7 @@ class Show(object):
                         epnum,
                         episode.find('prodnum').text,
                     )
+                self.seasons += 1
         
         self.episodes[self.seasons].is_current = True
 
