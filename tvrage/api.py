@@ -162,7 +162,8 @@ class Show(object):
                         epnum,
                         episode.find('prodnum').text,
                     )
-                self.seasons += 1
+                if snum > 0:
+                    self.seasons += 1
         
         self.episodes[self.seasons].is_current = True
 

@@ -42,7 +42,10 @@ def _fetch(url, node=None):
     try:
         xmldoc = urlopen(url)
     except URLError, e:
-        print(e)
+        try:
+	    print(str(e))
+        except:
+            return str(e)
     else:
         result = et.parse(xmldoc)
         root = result.getroot()
