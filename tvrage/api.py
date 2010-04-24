@@ -204,7 +204,7 @@ class Show(object):
         eps = self.season(self.seasons).values()
         eps.reverse()
         for e in eps:
-            if (e.airdate != None) and (e.airdate <= today):
+            if (e.airdate != None) and (e.airdate < today):
                 return e
 
     def season(self, n):
