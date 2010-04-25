@@ -128,15 +128,13 @@ class Show(object):
         show = feeds.search(self.shortname, node='show')
         # dynamically mapping the xml tags to properties:
         for elem in show:
-            # Don't set these yet
-            if elem.tag in ('seasons', ):
-                continue
-            # these properties should be ints
-            elif elem.tag in ('started', 'ended'):
-                self.__dict__[elem.tag] = int(elem.text)
-            # these are fine as strings
-            else:
-                self.__dict__[elem.tag] = elem.text
+            if not elem.tag == 'seasons': # we'll set this later 
+                # these properties should be ints
+                if elem.tag in ('started', 'ended'):
+                    self.__dict__[elem.tag] = int(elem.text)
+                # these are fine as strings
+                else:
+                    self.__dict__[elem.tag] = elem.text
         self.genres = [g.text for g in show.find('genres')]
 
         # and now grabbing the episodes
