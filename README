@@ -1,6 +1,0 @@
-
-python based client interface for tvrage.com's XML-based api feeds 
-(see http://www.tvrage.com/xmlfeeds.php).
-
-- the tvrage.feeds module provides wrapper functions for all of tvrage's XML-feeds
-- the tvrage.api module contains an object oriented interface on top of those feeds
