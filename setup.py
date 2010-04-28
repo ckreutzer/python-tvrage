@@ -8,7 +8,7 @@ from tvrage import __version__, __author__, __license__
 setup(name='python-tvrage',
       description='python client for the tvrage.com XML API',
       long_description = file(
-          os.path.join(os.path.dirname(__file__), 'README')).read(),
+          os.path.join(os.path.dirname(__file__),'README.rst')).read(),
       license=__license__,
       version=__version__,
       author=__author__,
