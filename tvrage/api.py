@@ -69,7 +69,7 @@ class Episode(object):
                 try:
                     summary = re.search(
                         r"</script><br>(.*?)<br>", page,
-                        re.MULTILINE).group(1).strip()
+                        re.MULTILINE | re.DOTALL).group(1).strip()
                     return unicode(summary, 'utf-8')
                 except Exception, e:
                     print('Episode.summary: %s, %s' % (self, e))
