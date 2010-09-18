@@ -173,8 +173,8 @@ Working with TV show objects::
     2005
     >>> doctor_who.status
     'Returning Series'
-    >>> doctor_who.upcomming_episodes
-    <generator object upcomming_episodes at 0x152f0a8>
+    >>> doctor_who.upcoming_episodes
+    <generator object upcoming_episodes at 0x152f0a8>
     
     
 The `Season` object is a python dict with additional properties::

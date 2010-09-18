@@ -181,19 +181,21 @@ class Show(object):
 
     @property
     def next_episode(self):
-        """returns the next upcomming episode"""
+        """returns the next upcoming episode"""
         try:
-            return self.upcomming_episodes.next()
+            return self.upcoming_episodes.next()
         except StopIteration:
             raise NoNewEpisodesAnnounced, self.name
 
     @property
-    def upcomming_episodes(self):
-        """returns all upcomming episodes that have been annouced yet"""
+    def upcoming_episodes(self):
+        """returns all upcoming episodes that have been annouced yet"""
         today = date.today()
         for e in self.current_season.values():
             if (e.airdate != None) and (e.airdate >= today):
                 yield e
+
+    upcomming_episodes = upcoming_episodes
 
     @property
     def latest_episode(self):

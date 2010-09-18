@@ -74,9 +74,9 @@ class ShowTest(unittest.TestCase):
     #def testGetCurrentSeason(self):
     #    assert self.show.current_season.premiere.season == 6
 
-    def test_get_upcomming_eps(self):
+    def test_get_upcoming_eps(self):
         today = date.today()
-        for ep in self.show.upcomming_episodes:
+        for ep in self.show.upcoming_episodes:
             airdate = ep.airdate
             assert airdate >= today
 
