@@ -25,41 +25,44 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from util import _fetch
-from urllib2 import quote
+from urllib2 import urlopen, URLError
 
-try:
-    import xml.etree.cElementTree as et
-except ImportError:
-    import xml.etree.ElementTree as et
+class TvrageError(Exception):
+    """ Base class for custom exceptions"""
     
-BASE_URL = 'http://www.tvrage.com/feeds/%s.php?%s=%s'
-    
-def _fetch_xml(url, node=None):
-    """fetches the response of a simple xml-based webservice. If node is omitted 
-    the root of the parsed xml doc is returned as an ElementTree object
-    otherwise the requested node is returned"""
-    xmldoc = _fetch(url)
-    result = et.parse(xmldoc)
-    root = result.getroot()
-    if not node:
-        retval = root
+    def __init__(self, msg):
+        self.msg = msg
+        
+    def __str__(self):
+        return self.msg
+
+class TvrageRequestError(TvrageError):
+    """ Wrapper for HTTP 400 """
+    pass
+
+class TvrageNotFoundError(TvrageError):
+    """ Wrapper for HTTP 404"""
+    pass
+
+class TvrageInternalServerError(TvrageError):
+    """ Wrapper for HTTP 500"""
+    pass
+
+  
+def _fetch(url):
+    try:
+        result = urlopen(url)
+    except URLError, e:
+        if 400 == e.code:
+            raise TvrageRequestError(str(e))
+        elif 404 == e.code:
+            raise TvrageNotFoundError(str(e))
+        elif 500 == e.code:
+            raise TvrageInternalServerError(str(e))
+        else:
+            raise TvrageError(str(e))
+    except Exception, e:
+        raise TvrageError(str(e))
     else:
-        retval = root.find(node)
-    return retval
-    
-def search(show, node=None):
-    return _fetch_xml(BASE_URL % ('search','show', quote(show)), node)
-    
-def full_search(show, node=None):
-    return _fetch_xml(BASE_URL % ('full_search','show', quote(show)), node)
-    
-def showinfo(sid, node=None):
-    return _fetch_xml(BASE_URL % ('showinfo', 'sid', sid), node)
-    
-def episode_list(sid, node=None):
-    return _fetch_xml(BASE_URL % ('episode_list', 'sid', sid), node)
-    
-def full_show_info(sid, node=None):
-    return _fetch_xml(BASE_URL % ('full_show_info', 'sid', sid), node)
-    
+        return result
+        

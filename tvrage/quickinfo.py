@@ -25,41 +25,25 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from urllib2 import urlopen, URLError, quote
 from util import _fetch
-from urllib2 import quote
 
-try:
-    import xml.etree.cElementTree as et
-except ImportError:
-    import xml.etree.ElementTree as et
-    
-BASE_URL = 'http://www.tvrage.com/feeds/%s.php?%s=%s'
-    
-def _fetch_xml(url, node=None):
-    """fetches the response of a simple xml-based webservice. If node is omitted 
-    the root of the parsed xml doc is returned as an ElementTree object
-    otherwise the requested node is returned"""
-    xmldoc = _fetch(url)
-    result = et.parse(xmldoc)
-    root = result.getroot()
-    if not node:
-        retval = root
-    else:
-        retval = root.find(node)
-    return retval
-    
-def search(show, node=None):
-    return _fetch_xml(BASE_URL % ('search','show', quote(show)), node)
-    
-def full_search(show, node=None):
-    return _fetch_xml(BASE_URL % ('full_search','show', quote(show)), node)
-    
-def showinfo(sid, node=None):
-    return _fetch_xml(BASE_URL % ('showinfo', 'sid', sid), node)
-    
-def episode_list(sid, node=None):
-    return _fetch_xml(BASE_URL % ('episode_list', 'sid', sid), node)
-    
-def full_show_info(sid, node=None):
-    return _fetch_xml(BASE_URL % ('full_show_info', 'sid', sid), node)
-    
+BASE_URL = 'http://services.tvrage.com/tools/quickinfo.php'
+
+
+def fetch(show, exact=False, ep=None):
+    query_string = '?show=' + show
+    if exact:
+        query_string = query_string + '&exact=1'
+    if ep:
+        query_string = query_string + '&ep=' + ep
+    resp = _fetch(BASE_URL + query_string)
+    show_info = {}
+    if not 'No Show Results Were Found For' in resp:
+        data = resp.read().replace('<pre>', '').splitlines()
+        for line in data:
+            k, v = line.split('@')
+            # TODO: use dateobj for dates
+            show_info[k] = v.split(' | ') if ' | ' in v else v 
+    return show_info
+
