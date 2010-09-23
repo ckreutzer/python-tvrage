@@ -222,6 +222,7 @@ Using the Quickinfo Feed
 ++++++++++++++++++++++++
 
 The modul `tvrage.quickinfo` provides easy access to the tvrage's `quickinfo feed`_.
+
 .. _quickinfo feed: http://services.tvrage.com/info.php?page=quickinfo
 
 You can fetch meta data about a tv show alone::
