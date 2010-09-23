@@ -32,18 +32,19 @@ BASE_URL = 'http://services.tvrage.com/tools/quickinfo.php'
 
 
 def fetch(show, exact=False, ep=None):
-    query_string = '?show=' + show
+    query_string = '?show=' + quote(show)
     if exact:
         query_string = query_string + '&exact=1'
     if ep:
-        query_string = query_string + '&ep=' + ep
-    resp = _fetch(BASE_URL + query_string)
+        query_string = query_string + '&ep=' + quote(ep)
+    resp = _fetch(BASE_URL + query_string).read()
     show_info = {}
     if not 'No Show Results Were Found For' in resp:
-        data = resp.read().replace('<pre>', '').splitlines()
+        data = resp.replace('<pre>', '').splitlines()
         for line in data:
             k, v = line.split('@')
-            # TODO: use dateobj for dates
-            show_info[k] = v.split(' | ') if ' | ' in v else v 
+            # TODO: use datetimeobj for dates
+            show_info[k] = (v.split(' | ') if ' | ' in v else 
+                                (v.split('^') if '^' in v else v)) 
     return show_info
 
