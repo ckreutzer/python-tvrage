@@ -217,4 +217,29 @@ For some episodes there is detailed summary information available. This informat
     >>> nextff
     FlashForward 1x18 Goodbye Yellow Brick Road
     >>> nextff.summary # spoilers alert!... you have to try this one for your self ;)
+   
+Using the Quickinfo Feed
+++++++++++++++++++++++++
+
+The modul `tvrage.quickinfo` provides easy access to the tvrage's `quickinfo feed`_.
+.. _quickinfo feed: http://services.tvrage.com/info.php?page=quickinfo
+
+You can fetch meta data about a tv show alone::
+
+    >>> from tvrage import quickinfo
+    >>> quickinfo.fetch('doctor who 2005')
+    {'Status': 'Returning Series', 'Genres': ['Action', 'Adventure', 'Sci-Fi'], 'Network': 'BBC One (United Kingdom)', 
+    'Classification': 'Scripted', 'Started': 'Mar/26/2005', 'Show Name': 'Doctor Who (2005)', 'Show URL': 
+    'http://www.tvrage.com/DoctorWho_2005', 'Premiered': '2005', 'Airtime': 'Saturday at 07:00 pm', 'Ended': '', 
+    'Show ID': '3332', 'Country': 'United Kingdom', 'Runtime': '50', 'Latest Episode': ['05x13', 'The Big Bang (2)', 'Jun/26/2010']} 
+
+or you can fetch informations about an specific episode combined with the show's meta data::
+
+    >>> epinfo = quickinfo.fetch('doctor who 2005', ep='1x01')    
+    >>> epinfo
+    {'Status': 'Returning Series', 'Genres': ['Action', 'Adventure', 'Sci-Fi'], ...
+    >>> epinfo['Episode Info']
+    ['01x01', 'Rose', '26/Mar/2005']
+    >>> epinfo['Episode URL']
+    'http://www.tvrage.com/DoctorWho_2005/episodes/52117'
     
