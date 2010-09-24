@@ -25,6 +25,7 @@ The `tvrage` package consists of two modules
 
 - the tvrage.feeds module provides a wrapper function for each of tvrage's XML-feeds
 - the tvrage.api module provides an clean and object oriented interface on top of those services
+- the tvrage.quickinfo module is a simple pythonic wrapper for tvrage's quickinfo api. Values are returned as python dictionaries rather than dedicated objects for tv shows and episodes 
 
 Fetching XML data
 +++++++++++++++++
