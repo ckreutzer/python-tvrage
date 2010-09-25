@@ -21,7 +21,7 @@ For `pip` you have to replace **'easy_install'** with **'pip install'**. Also yo
 Documentation
 -------------
 
-The `tvrage` package consists of two modules
+The `tvrage` package consists of three modules
 
 - the tvrage.feeds module provides a wrapper function for each of tvrage's XML-feeds
 - the tvrage.api module provides an clean and object oriented interface on top of those services
