@@ -1,4 +1,6 @@
-# Copyright (c) 2009, Christian Kreutzer
+#!/usr/bin/env python
+
+# Copyright (c) 2010, Christian Kreutzer
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -25,29 +27,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from urllib2 import urlopen, URLError, quote
-from util import _fetch
-from exceptions import ShowNotFound
-
-BASE_URL = 'http://services.tvrage.com/tools/quickinfo.php'
-
-
-def fetch(show, exact=False, ep=None):
-    query_string = '?show=' + quote(show)
-    if exact:
-        query_string = query_string + '&exact=1'
-    if ep:
-        query_string = query_string + '&ep=' + quote(ep)
-    resp = _fetch(BASE_URL + query_string).read()
-    show_info = {}
-    if 'No Show Results Were Found For' in resp:
-        raise ShowNotFound(show)
-    else:    
-        data = resp.replace('<pre>', '').splitlines()
-        for line in data:
-            k, v = line.split('@')
-            # TODO: use datetimeobj for dates
-            show_info[k] = (v.split(' | ') if ' | ' in v else 
-                                (v.split('^') if '^' in v else v)) 
-    return show_info
-
+class BaseError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+        
+class ShowHasEnded(BaseError): pass
+class NoNewEpisodesAnnounced(BaseError): pass
+class FinaleMayNotBeAnnouncedYet(BaseError): pass
+class ShowNotFound(BaseError): pass
