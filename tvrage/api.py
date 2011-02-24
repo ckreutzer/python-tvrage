@@ -52,7 +52,7 @@ class Episode(object):
         
 
     def __unicode__(self):
-        return '%s %sx%02d %s' % (self.show, self.season, self.number, self.title)
+        return u'%s %sx%02d %s' % (self.show, self.season, self.number, self.title)
     
     __str__ = __repr__ = __unicode__
     
