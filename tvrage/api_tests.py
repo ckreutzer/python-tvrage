@@ -83,10 +83,9 @@ class ShowTest(unittest.TestCase):
 
     def test_get_latest_ep(self):
         today = date.today()
-        # NOTE: this may break
-        ep = Show('Torchwood').latest_episode
+        ep = Show('FlashForward').latest_episode
         assert ep.airdate <= today
-        assert ep.title == 'Children of Earth (5)'
+        assert ep.title == 'Future Shock'
         
     def test_non_existant_show_raises_proper_exception(self):
         try:
