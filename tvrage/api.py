@@ -34,6 +34,8 @@ from time import mktime, strptime
 
 from exceptions import ShowHasEnded, FinaleMayNotBeAnnouncedYet, ShowNotFound
 
+from util import strip_tags
+
 
 class Episode(object):
     """represents an tv episode description from tvrage.com"""
@@ -63,12 +65,12 @@ class Episode(object):
         the episode summary isnt available via one of the xml feeds"""
         try:
             page = urlopen(self.link).read()
-            if not 'There is no summary added for this episode' in page:
+            if not 'Click here to add a summary' in page:
                 try:
                     summary = re.search(
-                        r"<div class='show_synopsis'>(.*?)<br>", page,
-                        re.MULTILINE | re.DOTALL).group(1).strip()
-                    return unicode(summary, 'utf-8')
+                    r"</script></div><div>(.*?)<br>", page,
+                        re.MULTILINE | re.DOTALL).group(1)
+                    return unicode(strip_tags(summary), 'utf-8').strip()
                 except Exception, e:
                     print('Episode.summary: %s, %s' % (self, e))
         except URLError, e:
