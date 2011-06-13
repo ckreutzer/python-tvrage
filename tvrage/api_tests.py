@@ -93,7 +93,19 @@ class ShowTest(unittest.TestCase):
         except Exception, e:
             assert isinstance(e, ShowNotFound)
             assert e.value == 'yaddayadda'
-
+            
+    def test_synopsis(self):       
+        assert self.show.synopsis.startswith(
+        u"As an infectious disease specialist, Dr. Gregory House (Hugh Laurie)"\
+        " is a brilliant diagnostician who loves the challenges of the medical"\
+        " puzzles he must solve in order to save lives. House solves the"\
+        " inexplicable cases that other doctors cannot understand.\n\nHouse"\
+        " isn't alone in this quest. His team includes neurologist Dr. Eric"\
+        " Foreman (Omar Epps), a neurologist with a troubled youth and a"\
+        " desire to avoid becoming as abrasive as House; immunologist Dr."\
+        " Allison Cameron (Jennifer Morrison) - who sometimes cares too much"\
+        " and has conflicting feelings about House;")
+        
 
 class SeasonTest(unittest.TestCase):
 

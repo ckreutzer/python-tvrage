@@ -208,6 +208,24 @@ class Show(object):
         for e in eps:
             if (e.airdate != None) and (e.airdate < today):
                 return e
+    
+    @property
+    def synopsis(self):
+        """scraps the synopsis from the show's tvrage page using a regular 
+        expression. This method might break when the page changes. unfortunatly 
+        the episode summary isnt available via one of the xml feeds"""
+        try:
+            page = urlopen(self.link).read()
+            try:
+                summary = re.search(
+                r'<div class="show_synopsis">(.*?)</div>', page,
+                    re.MULTILINE | re.DOTALL).group(1)
+                return unicode(strip_tags(summary), 'utf-8').strip()
+            except Exception, e:
+                print('Show.synopsis: %s, %s' % (self, e))
+        except URLError, e:
+            print('Show.synopsis:urlopen: %s, %s' % (self, e))
+        return 'No Synopsis available'
 
     def season(self, n):
         """returns the nth season as dict of episodes"""
