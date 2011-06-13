@@ -141,7 +141,7 @@ class EpisodeTest(unittest.TestCase):
     def test_link(self):
         assert self.ep.link == \
             'http://www.tvrage.com/House/episodes/461013'
-    def test_summary(self):
+    def test_summary_old(self):
         s = "An immensely overweight man is brought in after he's found at"\
             +" home in a coma. Upon regaining consciousness, he demands"\
             +" to be released. When Cameron comes up with a way to force"\
@@ -150,6 +150,13 @@ class EpisodeTest(unittest.TestCase):
             +" arrests House, searches his home, and questions his"\
             +" co-workers about his Vicodin usage."
         assert self.ep.summary == s
+        
+    def test_summary_new(self):
+        ep = Show('chaos').season(1).episode(8)
+        s = 'The agents go against orders to capture an arms dealer, but their'\
+            +' actions trouble Rick who must decide whether to report their'\
+            +' unauthorized activities to the CIA director.'
+        assert ep.summary == s
 
 if __name__ == '__main__':
     unittest.main()
