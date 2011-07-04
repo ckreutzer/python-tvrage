@@ -106,6 +106,10 @@ class ShowTest(unittest.TestCase):
         " Allison Cameron (Jennifer Morrison) - who sometimes cares too much"\
         " and has conflicting feelings about House;")
         
+    def test_show_with_missing_seasons_doesnt_mess_up_season_count(self):
+        # Seasons 39 - 47 are missing
+        s = Show(u'House Hunters')
+        assert s.seasons >= 48
 
 class SeasonTest(unittest.TestCase):
 
