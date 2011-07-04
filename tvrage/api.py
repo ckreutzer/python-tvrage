@@ -32,7 +32,8 @@ from urllib2 import urlopen, URLError
 from datetime import date
 from time import mktime, strptime
 
-from exceptions import ShowHasEnded, FinaleMayNotBeAnnouncedYet, ShowNotFound
+from exceptions import (ShowHasEnded, FinaleMayNotBeAnnouncedYet,
+                        ShowNotFound, NoNewEpisodesAnnounced)
 
 from util import strip_tags
 
