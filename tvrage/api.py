@@ -60,24 +60,6 @@ class Episode(object):
     
     __str__ = __repr__ = __unicode__
     
-    # @property
-    # def summary(self):
-    #     """scraps the plot summary episode's tvrage page using a regular 
-    #     expression this method might break when the page changes. unfortunatly 
-    #     the episode summary isnt available via one of the xml feeds"""
-    #     try:
-    #         page = urlopen(self.link).read()
-    #         if not 'Click here to add a summary' in page:
-    #             try:
-    #                 summary = re.search(
-    #                 r"</script></div><div>(.*?)<br>", page,
-    #                     re.MULTILINE | re.DOTALL).group(1)
-    #                 return unicode(strip_tags(summary), 'utf-8').strip()
-    #             except Exception, e:
-    #                 print('Episode.summary: %s, %s' % (self, e))
-    #     except URLError, e:
-    #         print('Episode.summary:urlopen: %s, %s' % (self, e))
-    #     return 'No summary available'
 
     @property
     def summary(self):
