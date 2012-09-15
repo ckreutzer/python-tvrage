@@ -25,10 +25,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import re
 import feeds
 
-from urllib2 import urlopen, URLError
 from datetime import date
 from time import mktime, strptime
 
