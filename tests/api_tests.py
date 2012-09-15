@@ -30,8 +30,8 @@
 import unittest
 
 from datetime import date
-from api import Show
-from exceptions import ShowHasEnded, FinaleMayNotBeAnnouncedYet, ShowNotFound
+from tvrage.api import Show
+from tvrage.exceptions import ShowHasEnded, FinaleMayNotBeAnnouncedYet, ShowNotFound
 
 class ShowTest(unittest.TestCase):
 

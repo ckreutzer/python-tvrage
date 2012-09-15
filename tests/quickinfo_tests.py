@@ -28,9 +28,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
-import quickinfo
+from tvrage import quickinfo
 
-from exceptions import ShowNotFound
+from tvrage.exceptions import ShowNotFound
 
 class QuickInfoTest(unittest.TestCase):
     
