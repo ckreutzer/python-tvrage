@@ -16,6 +16,7 @@ setup(name='python-tvrage',
       # url='http://bitbucket.org/ckreutzer/python-tvrage/',
       url='https://github.com/ckreutzer/python-tvrage',
       packages=['tvrage'],
+      install_requires = ["BeautifulSoup"],
       classifiers = [
           'Development Status :: 4 - Beta',
           'Intended Audience :: Developers',
