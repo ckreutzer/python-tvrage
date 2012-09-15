@@ -35,7 +35,8 @@ from time import mktime, strptime
 from exceptions import (ShowHasEnded, FinaleMayNotBeAnnouncedYet,
                         ShowNotFound, NoNewEpisodesAnnounced)
 
-from util import strip_tags
+from util import _fetch, parse_synopsis
+
 
 
 class Episode(object):
@@ -52,31 +53,57 @@ class Episode(object):
         self.link = link
         self.number = number
         self.prodnumber = prodnumber
-        
+        self.recap_url = link + '/recap'
+        self.id = link.split('/')[-1]
+
 
     def __unicode__(self):
         return u'%s %sx%02d %s' % (self.show, self.season, self.number, self.title)
     
     __str__ = __repr__ = __unicode__
     
+    # @property
+    # def summary(self):
+    #     """scraps the plot summary episode's tvrage page using a regular 
+    #     expression this method might break when the page changes. unfortunatly 
+    #     the episode summary isnt available via one of the xml feeds"""
+    #     try:
+    #         page = urlopen(self.link).read()
+    #         if not 'Click here to add a summary' in page:
+    #             try:
+    #                 summary = re.search(
+    #                 r"</script></div><div>(.*?)<br>", page,
+    #                     re.MULTILINE | re.DOTALL).group(1)
+    #                 return unicode(strip_tags(summary), 'utf-8').strip()
+    #             except Exception, e:
+    #                 print('Episode.summary: %s, %s' % (self, e))
+    #     except URLError, e:
+    #         print('Episode.summary:urlopen: %s, %s' % (self, e))
+    #     return 'No summary available'
+
     @property
     def summary(self):
-        """scraps the plot summary episode's tvrage page using a regular 
-        expression this method might break when the page changes. unfortunatly 
-        the episode summary isnt available via one of the xml feeds"""
+        """parses the episode's summary from the episode's tvrage page"""
         try:
-            page = urlopen(self.link).read()
+            page = _fetch(self.link).read()
             if not 'Click here to add a summary' in page:
-                try:
-                    summary = re.search(
-                    r"</script></div><div>(.*?)<br>", page,
-                        re.MULTILINE | re.DOTALL).group(1)
-                    return unicode(strip_tags(summary), 'utf-8').strip()
-                except Exception, e:
-                    print('Episode.summary: %s, %s' % (self, e))
-        except URLError, e:
-            print('Episode.summary:urlopen: %s, %s' % (self, e))
-        return 'No Summary available'
+                summary = parse_synopsis(page, cleanup='var')
+                return summary                
+        except Exception, e:
+            print('Episode.summary: %s, %s' % (self, e))
+        return 'No summary available'
+
+    @property
+    def recap(self):
+        """parses the episode's recap text from the episode's tvrage recap page"""
+        try:
+            page = _fetch(self.recap_url).read()
+            recap = parse_synopsis(page, 
+                cleanup='Share this article with your friends')
+            return recap
+        except Exception, e:
+            print('Episode.recap:urlopen: %s, %s' % (self, e))
+        return 'No recap available'
 
 
 class Season(dict):
@@ -198,8 +225,6 @@ class Show(object):
             if (e.airdate != None) and (e.airdate >= today):
                 yield e
 
-    upcomming_episodes = upcoming_episodes
-
     @property
     def latest_episode(self):
         """returns the latest episode that has aired already"""
@@ -216,15 +241,10 @@ class Show(object):
         expression. This method might break when the page changes. unfortunatly 
         the episode summary isnt available via one of the xml feeds"""
         try:
-            page = urlopen(self.link).read()
-            try:
-                summary = re.search(
-                r'<div class="show_synopsis">(.*?)</div>', page,
-                    re.MULTILINE | re.DOTALL).group(1)
-                return unicode(strip_tags(summary), 'utf-8').strip()
-            except Exception, e:
-                print('Show.synopsis: %s, %s' % (self, e))
-        except URLError, e:
+            page = _fetch(self.link).read()
+            synopsis = parse_synopsis(page)
+            return synopsis
+        except Exception, e:
             print('Show.synopsis:urlopen: %s, %s' % (self, e))
         return 'No Synopsis available'
 

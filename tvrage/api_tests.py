@@ -35,20 +35,20 @@ from exceptions import ShowHasEnded, FinaleMayNotBeAnnouncedYet, ShowNotFound
 
 class ShowTest(unittest.TestCase):
 
-    show = Show('house m.d.')
-    show_error = Show('farscape')
+    show = Show('Person of Interest')
+    dead_show = Show('house m.d.')
 
     def test_show_still_running(self):
         assert self.show.ended == 0
 
     def test_get_season(self):
         season = self.show.season(1)
-        assert len(season) == 22
+        assert len(season) == 23
         assert season.episode(1).title == 'Pilot'
 
     def test_get_next_episode_from_dead_show(self):
         try:
-            self.show_error.next_episode
+            self.dead_show.next_episode
         except Exception, e:
             assert isinstance(e, ShowHasEnded)
 
@@ -66,7 +66,7 @@ class ShowTest(unittest.TestCase):
 
     def test_get_current_season_from_dead_show(self):
         try:
-            self.show_error.current_season
+            self.dead_show.current_season
         except Exception, e:
             assert isinstance(e, ShowHasEnded)
 
@@ -95,16 +95,10 @@ class ShowTest(unittest.TestCase):
             assert e.value == 'yaddayadda'
             
     def test_synopsis(self):       
-        assert self.show.synopsis.startswith(
-        u"As an infectious disease specialist, Dr. Gregory House (Hugh Laurie)"\
+        assert self.dead_show.synopsis.startswith(
+        u"As an infectious disease specialist,Dr. Gregory House(Hugh Laurie)"\
         " is a brilliant diagnostician who loves the challenges of the medical"\
-        " puzzles he must solve in order to save lives. House solves the"\
-        " inexplicable cases that other doctors cannot understand.\n\nHouse"\
-        " isn't alone in this quest. His team includes neurologist Dr. Eric"\
-        " Foreman (Omar Epps), a neurologist with a troubled youth and a"\
-        " desire to avoid becoming as abrasive as House; immunologist Dr."\
-        " Allison Cameron (Jennifer Morrison) - who sometimes cares too much"\
-        " and has conflicting feelings about House;")
+        " puzzles he must solve in order to save lives.")
         
     def test_show_with_missing_seasons_doesnt_mess_up_season_count(self):
         # Seasons 39 - 47 are missing
@@ -130,7 +124,7 @@ class SeasonTest(unittest.TestCase):
         # NOTE: this test may break, when the season finale actually gets
         # announced
         try:
-            Show('house').current_season.finale
+            Show('Doctor Who 2005').current_season.finale
         except Exception, e:
             assert isinstance(e, FinaleMayNotBeAnnouncedYet)
 
@@ -173,6 +167,18 @@ class EpisodeTest(unittest.TestCase):
             +' actions trouble Rick who must decide whether to report their'\
             +' unauthorized activities to the CIA director.'
         assert ep.summary == s
+
+    def test_recap_url(self):
+        ep = Show('house m.d.').season(1).episode(1)
+        assert ep.recap_url == 'http://www.tvrage.com/House/episodes/84699/recap'
+
+    def test_id(self):
+        assert self.ep.id == '461013'
+
+    def test_recap(self):
+        ep = Show('house m.d.').season(1).episode(1)
+        s = 'House explains that when someone eats poorly prepared pork, tapeworms lodge in the bowels.'
+        assert s in ep.recap
 
 if __name__ == '__main__':
     unittest.main()
