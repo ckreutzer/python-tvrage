@@ -14,7 +14,7 @@ setup(name='python-tvrage',
       author=__author__,
       author_email='herr.kreutzer@gmail.com',
       # url='http://bitbucket.org/ckreutzer/python-tvrage/',
-      url='https://github.com/ckreutzer/python-tvrage'
+      url='https://github.com/ckreutzer/python-tvrage',
       packages=['tvrage'],
       classifiers = [
           'Development Status :: 4 - Beta',
