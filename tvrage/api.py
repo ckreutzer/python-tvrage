@@ -67,7 +67,7 @@ class Episode(object):
         try:
             page = _fetch(self.link).read()
             if not 'Click here to add a summary' in page:
-                summary = parse_synopsis(page, cleanup='var')
+                summary = parse_synopsis(page, cleanup='var addthis_config')
                 return summary                
         except Exception, e:
             print('Episode.summary: %s, %s' % (self, e))
