@@ -31,7 +31,9 @@ import unittest
 
 from datetime import date
 from tvrage.api import Show
-from tvrage.exceptions import ShowHasEnded, FinaleMayNotBeAnnouncedYet, ShowNotFound
+from tvrage.exceptions import (ShowHasEnded, FinaleMayNotBeAnnouncedYet,
+                               ShowNotFound)
+
 
 class ShowTest(unittest.TestCase):
 
@@ -70,7 +72,6 @@ class ShowTest(unittest.TestCase):
         except Exception, e:
             assert isinstance(e, ShowHasEnded)
 
-
     # this test may break when new season listings are posted
     #def testGetCurrentSeason(self):
     #    assert self.show.current_season.premiere.season == 6
@@ -86,24 +87,26 @@ class ShowTest(unittest.TestCase):
         ep = Show('FlashForward').latest_episode
         assert ep.airdate <= today
         assert ep.title == 'Future Shock'
-        
+
     def test_non_existant_show_raises_proper_exception(self):
         try:
             Show('yaddayadda')
         except Exception, e:
             assert isinstance(e, ShowNotFound)
             assert e.value == 'yaddayadda'
-            
-    def test_synopsis(self):       
+
+    def test_synopsis(self):
         assert self.dead_show.synopsis.startswith(
-        u"As an infectious disease specialist,Dr. Gregory House(Hugh Laurie)"\
-        " is a brilliant diagnostician who loves the challenges of the medical"\
-        " puzzles he must solve in order to save lives.")
-        
+            u"As an infectious disease specialist,Dr. Gregory House"
+            "(Hugh Laurie) is a brilliant diagnostician who loves the "
+            "challenges of the medical puzzles he must solve in order to save"
+            " lives.")
+
     def test_show_with_missing_seasons_doesnt_mess_up_season_count(self):
         # Seasons 39 - 47 are missing
         s = Show(u'House Hunters')
         assert s.seasons >= 48
+
 
 class SeasonTest(unittest.TestCase):
 
@@ -151,36 +154,37 @@ class EpisodeTest(unittest.TestCase):
     def test_link(self):
         assert self.ep.link == \
             'http://www.tvrage.com/House/episodes/461013'
+
     def test_summary_old(self):
         s = "An immensely overweight man is brought in after he's found at"\
-            +" home in a coma. Upon regaining consciousness, he demands"\
-            +" to be released. When Cameron comes up with a way to force"\
-            +" him to stay, the man insists the find a reason for his"\
-            +" illness other than his obesity. Meanwhile, Det. Tritter"\
-            +" arrests House, searches his home, and questions his"\
-            +" co-workers about his Vicodin usage."
+            " home in a coma. Upon regaining consciousness, he demands"\
+            " to be released. When Cameron comes up with a way to force"\
+            " him to stay, the man insists the find a reason for his"\
+            " illness other than his obesity. Meanwhile, Det. Tritter"\
+            " arrests House, searches his home, and questions his"\
+            " co-workers about his Vicodin usage."
         assert self.ep.summary == s
-        
+
     def test_summary_new(self):
         ep = Show('chaos').season(1).episode(8)
-        s = 'The agents go against orders to capture an arms dealer, but their'\
-            +' actions trouble Rick who must decide whether to report their'\
-            +' unauthorized activities to the CIA director.'
+        s = 'The agents go against orders to capture an arms dealer, but'\
+            ' their actions trouble Rick who must decide whether to report'\
+            ' their unauthorized activities to the CIA director.'
         assert ep.summary == s
 
     def test_recap_url(self):
         ep = Show('house m.d.').season(1).episode(1)
-        assert ep.recap_url == 'http://www.tvrage.com/House/episodes/84699/recap'
+        s = 'http://www.tvrage.com/House/episodes/84699/recap'
+        assert ep.recap_url == s
 
     def test_id(self):
         assert self.ep.id == '461013'
 
     def test_recap(self):
         ep = Show('house m.d.').season(1).episode(1)
-        s = 'House explains that when someone eats poorly prepared pork, tapeworms lodge in the bowels.'
+        s = 'House explains that when someone eats poorly prepared pork,'\
+            ' tapeworms lodge in the bowels.'
         assert s in ep.recap
 
 if __name__ == '__main__':
     unittest.main()
-
-
