@@ -52,7 +52,7 @@ class QuickInfoTest(unittest.TestCase):
         assert show['Classification'] == 'Scripted'
         assert show['Genres'] == ['Action', 'Adventure', 'Sci-Fi']
         assert show['Network'] == 'BBC One (United Kingdom)'
-        assert show['Airtime'] == 'Saturday at 08:00 pm' #this may break
+        assert show['Airtime'] == 'Saturday at 07:35 pm' #this may break
         assert show['Runtime'] == '60'
         
     def test_epinfo(self):
