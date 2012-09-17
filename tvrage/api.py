@@ -78,9 +78,10 @@ class Episode(object):
         """parses the episode's recap text from the episode's tvrage recap page"""
         try:
             page = _fetch(self.recap_url).read()
-            recap = parse_synopsis(page, 
-                cleanup='Share this article with your friends')
-            return recap
+            if not 'Click here to add a recap for' in page:
+                recap = parse_synopsis(page, 
+                    cleanup='Share this article with your friends')
+                return recap
         except Exception, e:
             print('Episode.recap:urlopen: %s, %s' % (self, e))
         return 'No recap available'

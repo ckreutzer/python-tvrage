@@ -185,6 +185,10 @@ class EpisodeTest(unittest.TestCase):
         s = 'House explains that when someone eats poorly prepared pork,'\
             ' tapeworms lodge in the bowels.'
         assert s in ep.recap
+        
+    def test_recap_negativ(self):
+        ep = Show('house m.d.').season(3).episode(6)
+        assert ep.recap == 'No recap available'
 
 if __name__ == '__main__':
     unittest.main()
