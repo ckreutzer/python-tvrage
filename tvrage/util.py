@@ -31,26 +31,29 @@ from BeautifulSoup import BeautifulSoup
 
 class TvrageError(Exception):
     """ Base class for custom exceptions"""
-    
+
     def __init__(self, msg):
         self.msg = msg
-        
+
     def __str__(self):
         return self.msg
+
 
 class TvrageRequestError(TvrageError):
     """ Wrapper for HTTP 400 """
     pass
 
+
 class TvrageNotFoundError(TvrageError):
     """ Wrapper for HTTP 404"""
     pass
+
 
 class TvrageInternalServerError(TvrageError):
     """ Wrapper for HTTP 500"""
     pass
 
-  
+
 def _fetch(url):
     try:
         result = urlopen(url)
@@ -67,16 +70,15 @@ def _fetch(url):
         raise TvrageError(str(e))
     else:
         return result
-    
+
 
 def parse_synopsis(page, cleanup=None):
     soup = BeautifulSoup(page)
     try:
-        result = soup.find('div', attrs={'class':'show_synopsis'}).text
+        result = soup.find('div', attrs={'class': 'show_synopsis'}).text
         #cleaning up a litle bit
         if cleanup:
             result, _ = result.split(cleanup)
         return result
     except AttributeError, e:
         print('parse_synopyis - BeautifulSoup.find(): %s' % e)
-        
