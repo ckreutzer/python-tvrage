@@ -36,17 +36,17 @@ from exceptions import (ShowHasEnded, FinaleMayNotBeAnnouncedYet,
 from util import _fetch, parse_synopsis
 
 
-
 class Episode(object):
     """represents an tv episode description from tvrage.com"""
-    
+
     def __init__(self, show, season, airdate, title, link, number, prodnumber):
         self.show = show
         self.season = season
         try:
-            self.airdate = date.fromtimestamp(mktime(strptime(airdate, '%Y-%m-%d')))
+            self.airdate = date.fromtimestamp(mktime(
+                strptime(airdate, '%Y-%m-%d')))
         except ValueError:
-            self.airdate = None 
+            self.airdate = None
         self.title = title
         self.link = link
         self.number = number
@@ -54,12 +54,11 @@ class Episode(object):
         self.recap_url = link + '/recap'
         self.id = link.split('/')[-1]
 
-
     def __unicode__(self):
-        return u'%s %sx%02d %s' % (self.show, self.season, self.number, self.title)
-    
+        return u'%s %sx%02d %s' % (self.show,
+                                   self.season, self.number, self.title)
+
     __str__ = __repr__ = __unicode__
-    
 
     @property
     def summary(self):
@@ -68,19 +67,21 @@ class Episode(object):
             page = _fetch(self.link).read()
             if not 'Click here to add a summary' in page:
                 summary = parse_synopsis(page, cleanup='var addthis_config')
-                return summary                
+                return summary
         except Exception, e:
             print('Episode.summary: %s, %s' % (self, e))
         return 'No summary available'
 
     @property
     def recap(self):
-        """parses the episode's recap text from the episode's tvrage recap page"""
+        """parses the episode's recap text from the episode's tvrage recap
+        page"""
         try:
             page = _fetch(self.recap_url).read()
             if not 'Click here to add a recap for' in page:
-                recap = parse_synopsis(page, 
-                    cleanup='Share this article with your friends')
+                recap = parse_synopsis(page,
+                                       cleanup='Share this article with your'
+                                       ' friends')
                 return recap
         except Exception, e:
             print('Episode.recap:urlopen: %s, %s' % (self, e))
@@ -99,7 +100,7 @@ class Season(dict):
     @property
     def premiere(self):
         """returns the season premiere episode"""
-        return self[1] # analog to the real world, season is 1-based
+        return self[1]  # analog to the real world, season is 1-based
 
     @property
     def finale(self):
@@ -112,7 +113,7 @@ class Season(dict):
 
 class Show(object):
     """represents a TV show description from tvrage.com
-    
+
     this class is kind of a wrapper around the following of tvrage's xml feeds:
     * http://www.tvrage.com/feeds/search.php?show=SHOWNAME
     * http://www.tvrage.com/feeds/episode_list.php?sid=SHOWID
@@ -121,7 +122,7 @@ class Show(object):
     def __init__(self, name):
         self.shortname = name
         self.episodes = {}
-        
+
         # the following properties will be populated dynamically
         self.genres = []
         self.showid = ''
@@ -133,13 +134,13 @@ class Show(object):
         self.started = 0
         self.ended = 0
         self.seasons = 0
-        
+
         show = feeds.search(self.shortname, node='show')
         if not show:
             raise ShowNotFound(name)
         # dynamically mapping the xml tags to properties:
         for elem in show:
-            if not elem.tag == 'seasons': # we'll set this later 
+            if not elem.tag == 'seasons':  # we'll set this later
                 # these properties should be ints
                 if elem.tag in ('started', 'ended'):
                     self.__dict__[elem.tag] = int(elem.text)
@@ -156,7 +157,7 @@ class Show(object):
             try:
                 snum = int(season.attrib['no'])
             except KeyError:
-                pass # TODO: adding handeling for specials and movies
+                pass  # TODO: adding handeling for specials and movies
                 # bsp: http://www.tvrage.com/feeds/episode_list.php?sid=3519
             else:
                 self.episodes[snum] = Season()
@@ -173,9 +174,7 @@ class Show(object):
                     )
                 if snum > 0:
                     self.seasons = max(snum, self.seasons)
-        
         self.episodes[self.seasons].is_current = True
-
 
     @property
     def pilot(self):
@@ -185,7 +184,7 @@ class Show(object):
     @property
     def current_season(self):
         """returns the season currently running on tv"""
-        if not self.ended: # still running
+        if not self.ended:  # still running
             return self.episodes[self.seasons]
         else:
             raise ShowHasEnded(self.name)
@@ -203,7 +202,7 @@ class Show(object):
         """returns all upcoming episodes that have been annouced yet"""
         today = date.today()
         for e in self.current_season.values():
-            if (e.airdate != None) and (e.airdate >= today):
+            if (e.airdate is not None) and (e.airdate >= today):
                 yield e
 
     @property
@@ -213,13 +212,13 @@ class Show(object):
         eps = self.season(self.seasons).values()
         eps.reverse()
         for e in eps:
-            if (e.airdate != None) and (e.airdate < today):
+            if (e.airdate is not None) and (e.airdate < today):
                 return e
-    
+
     @property
     def synopsis(self):
-        """scraps the synopsis from the show's tvrage page using a regular 
-        expression. This method might break when the page changes. unfortunatly 
+        """scraps the synopsis from the show's tvrage page using a regular
+        expression. This method might break when the page changes. unfortunatly
         the episode summary isnt available via one of the xml feeds"""
         try:
             page = _fetch(self.link).read()
@@ -231,5 +230,4 @@ class Show(object):
 
     def season(self, n):
         """returns the nth season as dict of episodes"""
-        return self.episodes[n]    
-        
+        return self.episodes[n]
